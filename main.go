@@ -24,12 +24,6 @@ const (
 	DEFAULT_FILENAME = "stars.png"
 )
 
-type Star struct {
-	x     int
-	y     int
-	class SpectralClass
-}
-
 func create_blank(max_x int, max_y int) *image.RGBA {
 	img := image.NewRGBA(image.Rect(0, 0, max_x, max_y))
 

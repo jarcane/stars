@@ -34,3 +34,9 @@ var spectralClasses = map[SpectralClass]RGB{
 	K: {255, 210, 161},
 	M: {255, 204, 111},
 }
+
+type Star struct {
+	x     int
+	y     int
+	class SpectralClass
+}
