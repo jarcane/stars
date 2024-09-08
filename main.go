@@ -10,6 +10,8 @@ import (
 )
 
 const (
+	X_SIZE    = 640
+	Y_SIZE    = 480
 	MIN_STARS = 50
 	MAX_STARS = 150
 )
@@ -18,6 +20,18 @@ type Star struct {
 	x     int
 	y     int
 	class SpectralClass
+}
+
+func create_blank(max_x int, max_y int) *image.NRGBA {
+	img := image.NewNRGBA(image.Rect(0, 0, max_x, max_y))
+
+	for y := img.Bounds().Min.Y; y < img.Bounds().Max.Y; y++ {
+		for x := img.Bounds().Min.X; x < img.Bounds().Max.X; x++ {
+			img.Set(x, y, color.Black)
+		}
+	}
+
+	return img
 }
 
 func generate_stars(max_x int, max_y int) []Star {
@@ -46,20 +60,8 @@ func draw_stars(img *image.NRGBA, stars []Star) {
 	}
 }
 
-func main() {
-	img := image.NewNRGBA(image.Rect(0, 0, 640, 480))
-
-	for y := img.Bounds().Min.Y; y < img.Bounds().Max.Y; y++ {
-		for x := img.Bounds().Min.X; x < img.Bounds().Max.X; x++ {
-			img.Set(x, y, color.Black)
-		}
-	}
-
-	stars := generate_stars(640, 480)
-
-	draw_stars(img, stars)
-
-	f, err := os.Create("stars.png")
+func write_image(img *image.NRGBA, filename string) {
+	f, err := os.Create(filename)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -72,4 +74,14 @@ func main() {
 	if err := f.Close(); err != nil {
 		log.Fatal(err)
 	}
+}
+
+func main() {
+	img := create_blank(X_SIZE, Y_SIZE)
+
+	stars := generate_stars(X_SIZE, Y_SIZE)
+
+	draw_stars(img, stars)
+
+	write_image(img, "stars.png")
 }
