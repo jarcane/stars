@@ -61,7 +61,7 @@ func draw_stars(img *image.RGBA, stars []Star) {
 		gc.SetFillColor(c)
 
 		gc.BeginPath()
-		draw2dkit.Circle(gc, float64(x), float64(y), 5)
+		draw2dkit.Circle(gc, float64(x), float64(y), 8-float64(star.class/2))
 		gc.FillStroke()
 
 	}
