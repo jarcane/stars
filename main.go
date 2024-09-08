@@ -18,8 +18,8 @@ import (
 const (
 	X_SIZE           = 1920
 	Y_SIZE           = 1080
-	MIN_STARS        = 50
-	MAX_STARS        = 150
+	MIN_STARS        = 100
+	MAX_STARS        = 200
 	MAX_RANGE        = 300
 	DEFAULT_FILENAME = "stars.png"
 )
