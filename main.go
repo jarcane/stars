@@ -1,6 +1,7 @@
 package main
 
 import (
+	"flag"
 	"image"
 	"image/color"
 	"image/png"
@@ -10,10 +11,11 @@ import (
 )
 
 const (
-	X_SIZE    = 640
-	Y_SIZE    = 480
-	MIN_STARS = 50
-	MAX_STARS = 150
+	X_SIZE           = 640
+	Y_SIZE           = 480
+	MIN_STARS        = 50
+	MAX_STARS        = 150
+	DEFAULT_FILENAME = "stars.png"
 )
 
 type Star struct {
@@ -77,11 +79,16 @@ func write_image(img *image.NRGBA, filename string) {
 }
 
 func main() {
-	img := create_blank(X_SIZE, Y_SIZE)
+	filename := flag.String("filename", DEFAULT_FILENAME, "the filename of the output")
+	x := flag.Int("x", X_SIZE, "Horizontal size of image")
+	y := flag.Int("y", Y_SIZE, "Vertical size of image")
+	flag.Parse()
 
-	stars := generate_stars(X_SIZE, Y_SIZE)
+	img := create_blank(*x, *y)
+
+	stars := generate_stars(*x, *y)
 
 	draw_stars(img, stars)
 
-	write_image(img, "stars.png")
+	write_image(img, *filename)
 }
