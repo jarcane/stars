@@ -9,29 +9,30 @@ import (
 	"os"
 )
 
+const (
+	MIN_STARS = 50
+	MAX_STARS = 150
+)
+
 type Star struct {
 	x     int
 	y     int
 	class SpectralClass
 }
 
-func main() {
-	img := image.NewNRGBA(image.Rect(0, 0, 640, 480))
-
-	for y := img.Bounds().Min.Y; y < img.Bounds().Max.Y; y++ {
-		for x := img.Bounds().Min.X; x < img.Bounds().Max.X; x++ {
-			img.Set(x, y, color.Black)
-		}
-	}
-
-	num_stars := 50 + rand.Intn(100)
+func generate_stars(max_x int, max_y int) []Star {
+	num_stars := MIN_STARS + rand.Intn(MAX_STARS-MIN_STARS)
 	stars := make([]Star, num_stars)
 
 	for n := 0; n < num_stars; n++ {
-		stars[n] = Star{rand.Intn(640), rand.Intn(480), SpectralClass(rand.Intn(7))}
+		stars[n] = Star{rand.Intn(max_x), rand.Intn(max_y), SpectralClass(rand.Intn(7))}
 	}
 
-	for n := 0; n < num_stars; n++ {
+	return stars
+}
+
+func draw_stars(img *image.NRGBA, stars []Star) {
+	for n := 0; n < len(stars); n++ {
 		star := stars[n]
 		x := star.x
 		y := star.y
@@ -43,6 +44,20 @@ func main() {
 		img.Set(x-1, y, c)
 		img.Set(x, y-1, c)
 	}
+}
+
+func main() {
+	img := image.NewNRGBA(image.Rect(0, 0, 640, 480))
+
+	for y := img.Bounds().Min.Y; y < img.Bounds().Max.Y; y++ {
+		for x := img.Bounds().Min.X; x < img.Bounds().Max.X; x++ {
+			img.Set(x, y, color.Black)
+		}
+	}
+
+	stars := generate_stars(640, 480)
+
+	draw_stars(img, stars)
 
 	f, err := os.Create("stars.png")
 	if err != nil {
