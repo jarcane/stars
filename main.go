@@ -6,9 +6,9 @@ import (
 	"image/color"
 	"image/png"
 	"log"
-	"math/rand"
 	"os"
 
+	"github.com/llgcode/draw2d"
 	"github.com/llgcode/draw2d/draw2dimg"
 	"github.com/llgcode/draw2d/draw2dkit"
 )
@@ -35,21 +35,13 @@ func create_blank(max_x int, max_y int) *image.RGBA {
 	return img
 }
 
-func generate_stars(max_x int, max_y int) []Star {
-	num_stars := MIN_STARS + rand.Intn(MAX_STARS-MIN_STARS)
-	stars := make([]Star, num_stars)
-
-	for n := 0; n < num_stars; n++ {
-		stars[n] = Star{rand.Intn(max_x), rand.Intn(max_y), SpectralClass(rand.Intn(7))}
-	}
-
-	return stars
-}
-
 func draw_stars(img *image.RGBA, stars []Star) {
 	gc := draw2dimg.NewGraphicContext(img)
 	gc.SetStrokeColor(color.RGBA64{128, 128, 128, 255})
 	gc.SetLineWidth(1)
+	draw2d.SetFontFolder("./resource/font")
+	draw2d.SetFontNamer(func(fontData draw2d.FontData) string { return "FiraCode-Bold.ttf" })
+	gc.SetFontSize(9)
 
 	for n := 0; n < len(stars); n++ {
 		star := stars[n]
@@ -63,6 +55,8 @@ func draw_stars(img *image.RGBA, stars []Star) {
 		draw2dkit.Circle(gc, float64(x), float64(y), 3+float64(star.class/2))
 		gc.FillStroke()
 
+		gc.SetFillColor(color.White)
+		gc.FillStringAt(star.name, float64(star.x), float64(star.y-7))
 	}
 }
 

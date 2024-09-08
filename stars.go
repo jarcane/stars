@@ -3,6 +3,7 @@ package main
 import (
 	"image/color"
 	"math"
+	"math/rand"
 
 	"github.com/samber/lo"
 )
@@ -43,6 +44,7 @@ var spectralClasses = map[SpectralClass]RGB{
 type Star struct {
 	x     int
 	y     int
+	name  string
 	class SpectralClass
 }
 
@@ -67,4 +69,15 @@ func find_neighbors(origin Star, stars []Star) []Star {
 	filtered := lo.Slice(lo.Uniq(in_range), 0, MAX_CONNECTIONS)
 
 	return filtered
+}
+
+func generate_stars(max_x int, max_y int) []Star {
+	num_stars := MIN_STARS + rand.Intn(MAX_STARS-MIN_STARS)
+	stars := make([]Star, num_stars)
+
+	for n := 0; n < num_stars; n++ {
+		stars[n] = Star{rand.Intn(max_x), rand.Intn(max_y), randomStarName(n), SpectralClass(rand.Intn(7))}
+	}
+
+	return stars
 }
