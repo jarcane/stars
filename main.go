@@ -5,6 +5,7 @@ import (
 	"image/color"
 	"image/png"
 	"log"
+	"math/rand"
 	"os"
 )
 
@@ -15,6 +16,19 @@ func main() {
 		for x := stars.Bounds().Min.X; x < stars.Bounds().Max.X; x++ {
 			stars.Set(x, y, color.Black)
 		}
+	}
+
+	num_stars := rand.Intn(150)
+
+	for n := 0; n < num_stars; n++ {
+		x := rand.Intn(640)
+		y := rand.Intn(480)
+
+		stars.Set(x, y, color.White)
+		stars.Set(x+1, y, color.White)
+		stars.Set(x, y+1, color.White)
+		stars.Set(x-1, y, color.White)
+		stars.Set(x, y-1, color.White)
 	}
 
 	f, err := os.Create("stars.png")
