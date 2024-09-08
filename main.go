@@ -21,6 +21,7 @@ const (
 	MIN_STARS        = 100
 	MAX_STARS        = 200
 	MAX_RANGE        = 300
+	MAX_CONNECTIONS  = 4
 	DEFAULT_FILENAME = "stars.png"
 )
 
@@ -90,8 +91,9 @@ func draw_routes(img *image.RGBA, stars []Star) {
 
 	for _, s := range habitable {
 		in_range := lo.Filter(habitable, func(dest Star, _ int) bool { return is_in_range(s, dest) })
+		filtered := lo.Slice(lo.Uniq(in_range), 0, MAX_CONNECTIONS)
 
-		for _, d := range in_range {
+		for _, d := range filtered {
 			gc.MoveTo(float64(s.x), float64(s.y))
 			gc.LineTo(float64(d.x), float64(d.y))
 			gc.Close()
