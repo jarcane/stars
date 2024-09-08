@@ -11,15 +11,16 @@ import (
 	"os"
 
 	"github.com/llgcode/draw2d/draw2dimg"
+	"github.com/llgcode/draw2d/draw2dkit"
 	"github.com/samber/lo"
 )
 
 const (
-	X_SIZE           = 640
-	Y_SIZE           = 480
+	X_SIZE           = 1920
+	Y_SIZE           = 1080
 	MIN_STARS        = 50
 	MAX_STARS        = 150
-	MAX_RANGE        = 100
+	MAX_RANGE        = 300
 	DEFAULT_FILENAME = "stars.png"
 )
 
@@ -53,17 +54,22 @@ func generate_stars(max_x int, max_y int) []Star {
 }
 
 func draw_stars(img *image.RGBA, stars []Star) {
+	gc := draw2dimg.NewGraphicContext(img)
+	gc.SetStrokeColor(color.RGBA64{128, 128, 128, 255})
+	gc.SetLineWidth(1)
+
 	for n := 0; n < len(stars); n++ {
 		star := stars[n]
 		x := star.x
 		y := star.y
 		c := spectralClasses[star.class].toRGBA(255)
 
-		img.Set(x, y, c)
-		img.Set(x+1, y, c)
-		img.Set(x, y+1, c)
-		img.Set(x-1, y, c)
-		img.Set(x, y-1, c)
+		gc.SetFillColor(c)
+
+		gc.BeginPath()
+		draw2dkit.Circle(gc, float64(x), float64(y), 5)
+		gc.FillStroke()
+
 	}
 }
 
@@ -86,7 +92,7 @@ func draw_routes(img *image.RGBA, stars []Star) {
 
 	gc.SetFillColor(color.RGBA{128, 128, 128, 255})
 	gc.SetStrokeColor(color.RGBA{128, 128, 128, 255})
-	gc.SetLineWidth(0.2)
+	gc.SetLineWidth(1)
 
 	for _, s := range habitable {
 		in_range := lo.Filter(habitable, func(dest Star, _ int) bool { return is_in_range(s, dest) })
