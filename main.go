@@ -6,13 +6,11 @@ import (
 	"image/color"
 	"image/png"
 	"log"
-	"math"
 	"math/rand"
 	"os"
 
 	"github.com/llgcode/draw2d/draw2dimg"
 	"github.com/llgcode/draw2d/draw2dkit"
-	"github.com/samber/lo"
 )
 
 const (
@@ -68,21 +66,7 @@ func draw_stars(img *image.RGBA, stars []Star) {
 	}
 }
 
-func is_habitable(s Star) bool {
-	return s.class == G || s.class == K || s.class == M
-}
-
-func is_in_range(orig Star, dest Star) bool {
-	x_diff := math.Pow(float64(orig.x-dest.x), 2)
-	y_diff := math.Pow(float64(orig.y-dest.y), 2)
-	dist := math.Sqrt(x_diff + y_diff)
-
-	return dist <= MAX_RANGE
-}
-
-func draw_routes(img *image.RGBA, stars []Star) {
-	habitable := lo.Filter(stars, func(s Star, _ int) bool { return is_habitable(s) })
-
+func draw_routes(img *image.RGBA, habitable []Star) {
 	gc := draw2dimg.NewGraphicContext(img)
 
 	gc.SetFillColor(color.RGBA{128, 128, 128, 255})
@@ -90,8 +74,7 @@ func draw_routes(img *image.RGBA, stars []Star) {
 	gc.SetLineWidth(1)
 
 	for _, s := range habitable {
-		in_range := lo.Filter(habitable, func(dest Star, _ int) bool { return is_in_range(s, dest) })
-		filtered := lo.Slice(lo.Uniq(in_range), 0, MAX_CONNECTIONS)
+		filtered := find_neighbors(s, habitable)
 
 		for _, d := range filtered {
 			gc.MoveTo(float64(s.x), float64(s.y))
@@ -127,8 +110,9 @@ func main() {
 	img := create_blank(*x, *y)
 
 	stars := generate_stars(*x, *y)
+	habitable := habitables(stars)
 
-	draw_routes(img, stars)
+	draw_routes(img, habitable)
 	draw_stars(img, stars)
 	write_image(img, *filename)
 }
