@@ -1,3 +1,6 @@
 *.png
 !stars.png
 *.exe
+*.zip
+*.osx
+*.linux
