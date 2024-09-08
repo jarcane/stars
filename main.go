@@ -23,7 +23,7 @@ func main() {
 	for n := 0; n < num_stars; n++ {
 		x := rand.Intn(640)
 		y := rand.Intn(480)
-		c := color.RGBA{uint8(rand.Intn(256)), uint8(rand.Intn(256)), uint8(rand.Intn(256)), 255}
+		c := spectralClasses[SpectralClass(rand.Intn(7))].toRGBA(255)
 
 		stars.Set(x, y, c)
 		stars.Set(x+1, y, c)
