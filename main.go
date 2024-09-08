@@ -23,12 +23,13 @@ func main() {
 	for n := 0; n < num_stars; n++ {
 		x := rand.Intn(640)
 		y := rand.Intn(480)
+		c := color.RGBA{uint8(rand.Intn(256)), uint8(rand.Intn(256)), uint8(rand.Intn(256)), 255}
 
-		stars.Set(x, y, color.White)
-		stars.Set(x+1, y, color.White)
-		stars.Set(x, y+1, color.White)
-		stars.Set(x-1, y, color.White)
-		stars.Set(x, y-1, color.White)
+		stars.Set(x, y, c)
+		stars.Set(x+1, y, c)
+		stars.Set(x, y+1, c)
+		stars.Set(x-1, y, c)
+		stars.Set(x, y-1, c)
 	}
 
 	f, err := os.Create("stars.png")
