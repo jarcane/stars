@@ -42,10 +42,11 @@ var spectralClasses = map[SpectralClass]RGB{
 }
 
 type Star struct {
-	x     int
-	y     int
-	name  string
-	class SpectralClass
+	x       int
+	y       int
+	name    string
+	class   SpectralClass
+	station bool
 }
 
 func is_habitable(s Star) bool {
@@ -76,7 +77,11 @@ func generate_stars(max_x int, max_y int) []Star {
 	stars := make([]Star, num_stars)
 
 	for n := 0; n < num_stars; n++ {
-		stars[n] = Star{rand.Intn(max_x), rand.Intn(max_y), randomStarName(n), SpectralClass(rand.Intn(7))}
+		class := SpectralClass(rand.Intn(7))
+		stars[n] = Star{rand.Intn(max_x), rand.Intn(max_y), randomStarName(n), class, false}
+		if is_habitable(stars[n]) && rand.Intn(10) > 5 {
+			stars[n].station = true
+		}
 	}
 
 	return stars
