@@ -40,7 +40,7 @@ func draw_stars(img *image.RGBA, stars []Star) {
 	gc.SetStrokeColor(color.RGBA64{128, 128, 128, 255})
 	gc.SetLineWidth(1)
 
-	for n := 0; n < len(stars); n++ {
+	for n := range len(stars) {
 		star := stars[n]
 		x := star.x
 		y := star.y

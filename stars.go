@@ -76,7 +76,7 @@ func generate_stars(max_x int, max_y int) []Star {
 	num_stars := MIN_STARS + rand.Intn(MAX_STARS-MIN_STARS)
 	stars := make([]Star, num_stars)
 
-	for n := 0; n < num_stars; n++ {
+	for n := range num_stars {
 		class := SpectralClass(rand.Intn(7))
 		stars[n] = Star{rand.Intn(max_x), rand.Intn(max_y), randomStarName(n), class, false}
 		if is_habitable(stars[n]) && rand.Intn(10) > 5 {
